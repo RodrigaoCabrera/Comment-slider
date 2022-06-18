@@ -1,8 +1,12 @@
 import "./App.css";
 
+//Import de hooks
+import { useRef } from "react";
+
 //import de imágenes
 import profile from "./assets/profile.png";
 import ro from "./assets/ro.png";
+import gl from "./assets/gl.jpg";
 import next from "./assets/next.svg";
 import prev from "./assets/prev.svg";
 
@@ -10,14 +14,40 @@ import prev from "./assets/prev.svg";
 import styled from "styled-components";
 
 export default function App() {
+  const sliderContainer = useRef(null);
+
+  const nextSlide = () => {
+    //Array de slide
+    const slides = sliderContainer.current;
+
+    //Primer elemento del array de slides
+    const firstElement = slides.children[0];
+    if (slides.children.length > 0) {
+      sliderContainer.current.style.transition = "3000ms ease-out all";
+
+      //Leemos el tamaño de los slide
+      const slideSize = slides.children[0].offsetWidth
+      //Movemos los slide
+      sliderContainer.current.style.transform = `translateX(-${slideSize}px)`;
+
+      //quitamos el translate y transition y movemos el primer slide al último lugar 
+      const  removeTransition = () => {
+        slides.style.transition = 'none';
+        slides.style.transform = 'translateX(0)';
+
+        slides.appendChild(firstElement);
+      }
+
+      slides.addEventListener('transitionend', removeTransition);
+    }
+  };
   return (
     <SliderContainer>
+      <Button>
+        <img src={prev} />
+      </Button>
       <SliderChildren>
-        <Button>
-          <img src={prev} />
-        </Button>
-
-        <CardContainer>
+        <CardContainer ref={sliderContainer}>
           <Card>
             <Profile>
               <ProfileImg src={ro} alt="foto de perfil" />
@@ -44,32 +74,45 @@ export default function App() {
               </p>
             </CommentContainer>
           </Card>
+          <Card>
+            <Profile>
+              <ProfileImg src={gl} alt="foto de perfil" />
+              <h1>Jhon Doe</h1>
+            </Profile>
+            <CommentContainer>
+              <p>
+                Me pareció excelente, creo que el Discord está muy bien
+                organizado y la iniciativa de NUWE es tremenda, gracias por la
+                oportunidad, realmente lo disfruté.
+              </p>
+            </CommentContainer>
+          </Card>
         </CardContainer>
-
-        <Button>
-          <img src={next} />
-        </Button>
       </SliderChildren>
+      <Button onClick={nextSlide}>
+        <img src={next} />
+      </Button>
     </SliderContainer>
   );
 }
 const SliderContainer = styled.div`
   background-color: #252835;
   height: 100vh;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
 `;
 
 const SliderChildren = styled.section`
   display: flex;
   align-items: center;
-  gap: 50px;
+  overflow: hidden;
+  max-width: 508px;
 `;
 const CardContainer = styled.div`
   display: flex;
   align-items: center;
-  overflow: hidden;
-  max-width: 508px;
 `;
 const Card = styled.section`
   min-width: 100%;
@@ -105,4 +148,5 @@ const CommentContainer = styled.div`
 const ProfileImg = styled.img`
   width: 50px;
   height: 50px;
+  border-radius: 50px;
 `;

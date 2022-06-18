@@ -1,70 +1,75 @@
-# Getting Started with Create React App
+# SLIDER COMMENT
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Un Slider que permite contener una serie de cards para visualizar una serie de contenidos. 
+Sus principales características son: el slider infinito y el slider automático.
 
-## Available Scripts
 
-In the project directory, you can run:
+## Background 
 
-### `yarn start`
+Dicho proyecto tiene como finalidad poner en práctica algunos aspecto de la librería ReactJs, cómo ser los hooks, manejos de evnetos y manipulación del DOM.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Usage
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+La flecha de la derecha mueve las card hacia la izquierda.
+La flecha de la derecha mueve las card hacia la derecha.
+Colocar el cursor encima de la card, detiene el slider automático.
 
-### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## API/Component
+El component cuenta con tres funcionalidades bien definidas:
 
-### `yarn build`
+nextSlide: que traslada el primer slide a la izquierda y luego lo envía al final de los slides.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+prevSlide: que coloca al último slide a la primera posición y luego meidante una translate, lo coloca a la vista del usuario con un efecto de izquierda a derecha.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+AutomaticSlide: Ejecuta el deslizamiento cuando el componente carga por primera vez.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+removeAutomaticSlide: que detiene el slider automático al colocar el puntero sobre las cards.
 
-### `yarn eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Installation
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Se debe contar con nodejs, git y yarn previamente instalados.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```shell
+    # Clone the repository
+    git clone https://github.com/rodrigocabrera19/Comment-slider.git
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```shell
+    # install dependencies
+    yarn install
+```
+```shell
+    # run the project
+    yarn start
+```
 
-## Learn More
+## Stack
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+ReactJs
+Styled Component
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+git
+github
+yarn
 
-### Code Splitting
+## Roadmap and visuals
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+![Imagen del slider](./src/assets/slider-infinito.png)
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Contact info
 
-### Making a Progressive Web App
+Email: rodrigod33d@gmail.com
+Linkedin: https://www.linkedin.com/in/rodrigocabrera19/
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Reconocimientos
 
-### Advanced Configuration
+ReactJs: https://es.reactjs.org/
+Styled Component: https://styled-components.com/docs
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## License 
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Inlcuir la licéncia y el link a esta
+[MIT](https://opensource.org/licenses/MIT)

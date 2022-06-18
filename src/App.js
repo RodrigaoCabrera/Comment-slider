@@ -177,10 +177,12 @@ const Profile = styled.div`
   align-items: center;
   gap: 10px;
   padding: 1rem;
+  color: #fff;
 `;
 
 const CommentContainer = styled.div`
   padding: 1rem;
+  color: #fff;
 `;
 
 const ProfileImg = styled.img`

@@ -1,30 +1,32 @@
 # SLIDER COMMENT
 
-Un Slider que permite contener una serie de cards para visualizar una serie de contenidos. 
+Un Slider que permite contener una serie de cards para la visualización de diversos contenidos. 
 Sus principales características son: el slider infinito y el slider automático.
 
 
 ## Background 
 
-Dicho proyecto tiene como finalidad poner en práctica algunos aspecto de la librería ReactJs, cómo ser los hooks, manejos de evnetos y manipulación del DOM.
+Dicho proyecto tiene como finalidad poner en práctica algunos aspecto de la librería ReactJs, como ser los hooks, manejos de eventos y la manipulación del DOM.
 
 ## Usage
 
 La flecha de la derecha mueve las card hacia la izquierda.
-La flecha de la derecha mueve las card hacia la derecha.
+
+La flecha de la izquierda mueve las card hacia la derecha.
+
 Colocar el cursor encima de la card, detiene el slider automático.
 
 
 ## API/Component
-El component cuenta con tres funcionalidades bien definidas:
+El component cuenta con cuatro funcionalidades bien definidas:
 
-nextSlide: que traslada el primer slide a la izquierda y luego lo envía al final de los slides.
+nextSlide: Traslada el primer slide a la izquierda y luego lo envía al final de los slides.
 
-prevSlide: que coloca al último slide a la primera posición y luego meidante una translate, lo coloca a la vista del usuario con un efecto de izquierda a derecha.
+prevSlide: Coloca al último slide a la primera posición y luego mediante una translate, lo coloca a la vista del usuario con un efecto de izquierda a derecha.
 
-AutomaticSlide: Ejecuta el deslizamiento cuando el componente carga por primera vez.
+AutomaticSlide: Ejecuta el deslizamiento automático e infinito cuando el componente carga por primera vez.
 
-removeAutomaticSlide: que detiene el slider automático al colocar el puntero sobre las cards.
+removeAutomaticSlide: Detiene el slider automático al colocar el puntero sobre las cards.
 
 
 ## Installation
@@ -47,11 +49,11 @@ Se debe contar con nodejs, git y yarn previamente instalados.
 
 ## Stack
 
-ReactJs
+ReactJs<br/>
 Styled Component
 
-git
-github
+git<br/>
+github<br/>
 yarn
 
 ## Roadmap and visuals
@@ -61,15 +63,14 @@ yarn
 
 ## Contact info
 
-Email: rodrigod33d@gmail.com
+Email: rodrigod33d@gmail.com<br/>
 Linkedin: https://www.linkedin.com/in/rodrigocabrera19/
 
 ## Reconocimientos
 
-ReactJs: https://es.reactjs.org/
+ReactJs: https://es.reactjs.org/<br/>
 Styled Component: https://styled-components.com/docs
 
 ## License 
 
-Inlcuir la licéncia y el link a esta
 [MIT](https://opensource.org/licenses/MIT)

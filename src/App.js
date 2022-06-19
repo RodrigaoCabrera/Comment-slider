@@ -1,7 +1,7 @@
 import "./App.css";
 
 //Import de hooks
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 //import de imágenes
 import profile from "./assets/profile.png";
@@ -15,12 +15,7 @@ import styled from "styled-components";
 
 export default function App() {
   const sliderContainer = useRef(null);
-
-  //Array de slide
-  let slides;
-  useEffect(() => {
-    slides = sliderContainer.current;
-  }, []);
+  const sliderInterval = useRef(null);
 
   const nextSlide = () => {
     //Primer elemento del array de slides
@@ -28,7 +23,6 @@ export default function App() {
 
     //Accionamos solo si hay slide.
     if (slides.children.length > 0) {
-
       //Agregamos transition al contenedor de slide.
       slides.style.transition = "300ms ease-out all";
 
@@ -48,10 +42,9 @@ export default function App() {
         //Removemos el evento que está pendiente de la finalización de la transition.
         slides.removeEventListener("transitionend", removeTransition);
       };
-      
+
       //Agregamos un evento que está pendiente de la finalización de la transition.
       slides.addEventListener("transitionend", removeTransition);
-
     }
   };
 
@@ -65,77 +58,109 @@ export default function App() {
       slides.insertBefore(lastElement, slides.firstChild);
 
       //Leemos el tamaño de los slide
-      const slideSize = slides.children[0].offsetWidth; 
+      const slideSize = slides.children[0].offsetWidth;
 
       //Quitamos la transition al container del slides y los movemos a la izquierda en px el tamaño de los slide.
-      sliderContainer.current.style.transition = 'none';
+      sliderContainer.current.style.transition = "none";
       sliderContainer.current.style.transform = `translateX(-${slideSize}px)`;
 
       //Establecemos un tiempo en el cual se agregan transition al contenedor de slides y lo movemos a la ubicacion 0 del eje x para que se visualice
       setTimeout(() => {
-        sliderContainer.current.style.transition = '300ms ease-out all';
+        sliderContainer.current.style.transition = "300ms ease-out all";
         sliderContainer.current.style.transform = `translateX(0)`;
-      }, 30)
-
+      }, 30);
     }
   };
+
+  //Array de slide
+  let slides;
+  useEffect(() => {
+    slides = sliderContainer.current;
+
+    //Declaramos un intervalo que cada 4 segundos pasa al siguiente slide.
+    let slideAutomatic;
+    slideAutomatic = setInterval(() => {
+      nextSlide();
+    }, 4000);
+
+    let SliderContainer = sliderInterval.current;
+    //Detenemos el slide automático, eliminando el intervalo al pasar el mouse sobre el slider.
+    SliderContainer.addEventListener("mouseenter", () => {
+      clearInterval(slideAutomatic);
+    });
+
+    //Activamos nuevamente el slide automático al quitar el puntero del slider.
+    SliderContainer.addEventListener("mouseleave", () => {
+      slideAutomatic = setInterval(() => {
+        nextSlide();
+      }, 4000);
+    });
+  }, []);
+
   return (
-    <SliderContainer>
-      <Button onClick={prevSlide}>
-        <img src={prev} />
-      </Button>
-      <SliderChildren>
-        <CardContainer ref={sliderContainer}>
-          <Card>
-            <Profile>
-              <ProfileImg src={ro} alt="foto de perfil" />
-              <h1>Jhon Doe</h1>
-            </Profile>
-            <CommentContainer>
-              <p>
-                Me pareció excelente, creo que el Discord está muy bien
-                organizado y la iniciativa de NUWE es tremenda, gracias por la
-                oportunidad, realmente lo disfruté.
-              </p>
-            </CommentContainer>
-          </Card>
-          <Card>
-            <Profile>
-              <img src={profile} alt="foto de perfil" />
-              <h1>Jhon Doe</h1>
-            </Profile>
-            <CommentContainer>
-              <p>
-                Me pareció excelente, creo que el Discord está muy bien
-                organizado y la iniciativa de NUWE es tremenda, gracias por la
-                oportunidad, realmente lo disfruté.
-              </p>
-            </CommentContainer>
-          </Card>
-          <Card>
-            <Profile>
-              <ProfileImg src={gl} alt="foto de perfil" />
-              <h1>Jhon Doe</h1>
-            </Profile>
-            <CommentContainer>
-              <p>
-                Me pareció excelente, creo que el Discord está muy bien
-                organizado y la iniciativa de NUWE es tremenda, gracias por la
-                oportunidad, realmente lo disfruté.
-              </p>
-            </CommentContainer>
-          </Card>
-        </CardContainer>
-      </SliderChildren>
-      <Button onClick={nextSlide}>
-        <img src={next} />
-      </Button>
-    </SliderContainer>
+    <SliderMain>
+      <SliderContainer ref={sliderInterval}>
+        <Button onClick={prevSlide}>
+          <img src={prev} />
+        </Button>
+        <SliderChildren>
+          <CardContainer ref={sliderContainer}>
+            <Card>
+              <Profile>
+                <ProfileImg src={ro} alt="foto de perfil" />
+                <h1>Jhon Doe</h1>
+              </Profile>
+              <CommentContainer>
+                <p>
+                  Me pareció excelente, creo que el Discord está muy bien
+                  organizado y la iniciativa de NUWE es tremenda, gracias por la
+                  oportunidad, realmente lo disfruté.
+                </p>
+              </CommentContainer>
+            </Card>
+            <Card>
+              <Profile>
+                <img src={profile} alt="foto de perfil" />
+                <h1>Jhon Doe</h1>
+              </Profile>
+              <CommentContainer>
+                <p>
+                  Me pareció excelente, creo que el Discord está muy bien
+                  organizado y la iniciativa de NUWE es tremenda, gracias por la
+                  oportunidad, realmente lo disfruté.
+                </p>
+              </CommentContainer>
+            </Card>
+            <Card>
+              <Profile>
+                <ProfileImg src={gl} alt="foto de perfil" />
+                <h1>Jhon Doe</h1>
+              </Profile>
+              <CommentContainer>
+                <p>
+                  Me pareció excelente, creo que el Discord está muy bien
+                  organizado y la iniciativa de NUWE es tremenda, gracias por la
+                  oportunidad, realmente lo disfruté.
+                </p>
+              </CommentContainer>
+            </Card>
+          </CardContainer>
+        </SliderChildren>
+        <Button onClick={nextSlide}>
+          <img src={next} />
+        </Button>
+      </SliderContainer>
+    </SliderMain>
   );
 }
-const SliderContainer = styled.div`
-  background-color: #252835;
+const SliderMain = styled.div`
+  display: grid;
+  place-items: center;
   height: 100vh;
+  background-color: #252835;
+`;
+const SliderContainer = styled.div`
+  width: fit-content;
   display: flex;
   align-items: center;
   justify-content: center;

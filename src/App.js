@@ -6,7 +6,6 @@ import { useRef, useEffect, useState } from "react";
 //import de imágenes
 import profile from "./assets/profile.png";
 import ro from "./assets/ro.png";
-import gl from "./assets/gl.jpg";
 import next from "./assets/next.svg";
 import prev from "./assets/prev.svg";
 
@@ -133,7 +132,7 @@ export default function App() {
             </Card>
             <Card>
               <Profile>
-                <ProfileImg src={gl} alt="foto de perfil" />
+                <ProfileImg src={ro} alt="foto de perfil" />
                 <h1>Jhon Doe</h1>
               </Profile>
               <CommentContainer>

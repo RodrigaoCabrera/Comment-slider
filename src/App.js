@@ -6,6 +6,7 @@ import { useRef, useEffect, useState } from "react";
 //import de imágenes
 import profile from "./assets/profile.png";
 import ro from "./assets/ro.png";
+import moni from "./assets/monik2.png";
 import next from "./assets/next.svg";
 import prev from "./assets/prev.svg";
 
@@ -17,16 +18,19 @@ export default function App() {
   const sliderInterval = useRef(null);
 
   const nextSlide = () => {
+    //Leemos el tamaño de los slide
+    const slideSize = slides?.children[0].offsetWidth;
     //Primer elemento del array de slides
-    const firstElement = slides.children[0];
+    const firstElement = [slides?.children[0]];
+    handleSlides(slideSize, firstElement);
+  };
 
+  const handleSlides = (slideSize, elements) => {
     //Accionamos solo si hay slide.
     if (slides.children.length > 0) {
       //Agregamos transition al contenedor de slide.
-      slides.style.transition = "300ms ease-out all";
+      slides.style.transition = "1000ms ease-out all";
 
-      //Leemos el tamaño de los slide
-      const slideSize = slides.children[0].offsetWidth;
       //Movemos los slide
       slides.style.transform = `translateX(-${slideSize}px)`;
 
@@ -36,7 +40,9 @@ export default function App() {
         slides.style.transform = "translateX(0)";
 
         //Agregamos el primer slide al final del array de slide.
-        slides.appendChild(firstElement);
+        elements.forEach((e) => {
+          slides.appendChild(e);
+        });
 
         //Removemos el evento que está pendiente de la finalización de la transition.
         slides.removeEventListener("transitionend", removeTransition);
@@ -71,13 +77,23 @@ export default function App() {
     }
   };
 
+  const goToItem = (itemNumber) => {
+    const itemList = [...slides.children];
+    let slidesTotal = itemList.slice(0, 2);
+
+    //Establecemos el tamaño de los slides a recorrer para llegar al item o card solicitada.
+    const slideSize = slidesTotal.reduce((acc, curr) => {
+      return acc + curr.offsetWidth;
+    }, 0);
+    handleSlides(slideSize, slidesTotal);
+  };
+
   //Array de slide
   let slides;
   useEffect(() => {
     slides = sliderContainer.current;
-
     //Declaramos un intervalo que cada 4 segundos pasa al siguiente slide.
-    let slideAutomatic;
+    /* let slideAutomatic;
     slideAutomatic = setInterval(() => {
       nextSlide();
     }, 4000);
@@ -93,7 +109,7 @@ export default function App() {
       slideAutomatic = setInterval(() => {
         nextSlide();
       }, 4000);
-    });
+    }); */
   }, []);
 
   return (
@@ -132,7 +148,7 @@ export default function App() {
             </Card>
             <Card>
               <Profile>
-                <ProfileImg src={ro} alt="foto de perfil" />
+                <ProfileImg src={moni} alt="foto de perfil" />
                 <h1>Jhon Doe</h1>
               </Profile>
               <CommentContainer>
@@ -149,6 +165,8 @@ export default function App() {
           <img src={next} />
         </Button>
       </SliderContainer>
+
+      <button onClick={() => goToItem(3)}>Test</button>
     </SliderMain>
   );
 }

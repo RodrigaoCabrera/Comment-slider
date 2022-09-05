@@ -17,83 +17,124 @@ export default function App() {
   const sliderContainer = useRef(null);
   const sliderInterval = useRef(null);
 
+  const [totalItems, setTotalIndex] = useState(null);
+
   const nextSlide = () => {
     //Leemos el tamaño de los slide
     const slideSize = slides?.children[0].offsetWidth;
     //Primer elemento del array de slides
     const firstElement = [slides?.children[0]];
-    handleSlides(slideSize, firstElement);
+    handleSlides(slideSize, firstElement, "next");
   };
 
-  const handleSlides = (slideSize, elements) => {
+  const handleSlides = (slideSize, elements, actionType, itemNumber) => {
     //Accionamos solo si hay slide.
-    if (slides.children.length > 0) {
+    console.log(actionType);
+    if (totalItems > 0) {
       //Agregamos transition al contenedor de slide.
-      slides.style.transition = "1000ms ease-out all";
+      slides.style.transition = "300ms ease-out all";
 
-      //Movemos los slide
-      slides.style.transform = `translateX(-${slideSize}px)`;
+      if (actionType === "next") {
+        //Movemos los slide
+        slides.style.transform = `translateX(-${slideSize}px)`;
 
-      //quitamos el translate y transition y movemos el primer slide al último lugar
-      const removeTransition = () => {
-        slides.style.transition = "none";
-        slides.style.transform = "translateX(0)";
+        //quitamos el translate y transition y movemos el primer slide al último lugar
+        const removeTransition = () => {
+          slides.style.transition = "none";
+          slides.style.transform = "translateX(0)";
 
-        //Agregamos el primer slide al final del array de slide.
-        elements.forEach((e) => {
-          slides.appendChild(e);
+          //Agregamos el primer slide al final del array de slide.
+          elements.forEach((e) => {
+            slides.appendChild(e);
+          });
+
+          //Removemos el evento que está pendiente de la finalización de la transition.
+          slides.removeEventListener("transitionend", removeTransition);
+        };
+
+        //Agregamos un evento que está pendiente de la finalización de la transition.
+        slides.addEventListener("transitionend", removeTransition);
+
+        //Establecemos el index actual del slide
+        setCurrentCardIndex((prev) => {
+          return prev >= totalItems - 1 ? 0 : itemNumber || prev + elements.length;
         });
+      }
+      if (actionType === "prev") {
+        //Agregamos el/los elementos slide al inicio del array de slide.
+        //Insetamos el último slide antes del primero.
+        elements.forEach((e, i) => {
+          slides.insertBefore(elements.at(-(i+1)), slides.firstChild);
+          //console.log([...slides.children].at(-(i+1)))
+        });
+        //Quitamos la transition al container del slides y los movemos a la izquierda en px el tamaño de los slide.
+        slides.style.transition = "none";
+        slides.style.transform = `translateX(-${slideSize}px)`;
 
-        //Removemos el evento que está pendiente de la finalización de la transition.
-        slides.removeEventListener("transitionend", removeTransition);
-      };
+        //Establecemos un tiempo en el cual se agregan transition al contenedor de slides y lo movemos a la ubicacion 0 del eje x para que se visualice
+        setTimeout(() => {
+          slides.style.transition = "300ms ease-out all";
+          slides.style.transform = `translateX(0)`;
+        }, 30);
 
-      //Agregamos un evento que está pendiente de la finalización de la transition.
-      slides.addEventListener("transitionend", removeTransition);
+        //Establecemos el index actual del slide
+        setCurrentCardIndex((prev) => {
+          return prev <= 0 ? totalItems - 1 : itemNumber || prev - elements.length;
+        });
+      }
     }
   };
 
   const prevSlide = () => {
-    if (slides.children.length > 0) {
+    if (totalItems > 0) {
       //Obtenemos el último índice del array de slide.
       const lastIndex = slides.children.length - 1;
       //Obtenemos el último slide.
-      const lastElement = slides.children[lastIndex];
-      //Insetamos el último slide antes del primero.
-      slides.insertBefore(lastElement, slides.firstChild);
+      const lastElement = [slides.children[lastIndex]];
 
       //Leemos el tamaño de los slide
       const slideSize = slides.children[0].offsetWidth;
 
-      //Quitamos la transition al container del slides y los movemos a la izquierda en px el tamaño de los slide.
-      sliderContainer.current.style.transition = "none";
-      sliderContainer.current.style.transform = `translateX(-${slideSize}px)`;
-
-      //Establecemos un tiempo en el cual se agregan transition al contenedor de slides y lo movemos a la ubicacion 0 del eje x para que se visualice
-      setTimeout(() => {
-        sliderContainer.current.style.transition = "300ms ease-out all";
-        sliderContainer.current.style.transform = `translateX(0)`;
-      }, 30);
+      handleSlides(slideSize, lastElement, "prev");
     }
   };
 
+  //Guardamos el index del item o card actual
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const goToItem = (itemNumber) => {
-    const itemList = [...slides.children];
-    let slidesTotal = itemList.slice(0, 2);
+    if (currentCardIndex !== itemNumber) {
+      const itemList = [...slides.children];
+      let slidesTotal = currentCardIndex > itemNumber ?
+      itemList.slice(
+        -(currentCardIndex - itemNumber)
+      ):
+      itemList.slice(
+        0,
+        Math.abs(currentCardIndex - itemNumber)
+      );
 
-    //Establecemos el tamaño de los slides a recorrer para llegar al item o card solicitada.
-    const slideSize = slidesTotal.reduce((acc, curr) => {
-      return acc + curr.offsetWidth;
-    }, 0);
-    handleSlides(slideSize, slidesTotal);
+      //Establecemos el tamaño de los slides a recorrer para llegar al item o card solicitada.
+      const slideSize = slidesTotal?.reduce((acc, curr) => {
+        return acc + curr?.offsetWidth;
+      }, 0);
+      if (itemNumber > currentCardIndex) {
+        return handleSlides(slideSize, slidesTotal, "next", itemNumber);
+      } else {
+        //Obtenemos el último índice del array de slide.
+        const lastIndex = slides.children.length - 1;
+        return handleSlides(slideSize, slidesTotal, "prev", itemNumber);
+      }
+    }
+    return;
   };
 
   //Array de slide
-  let slides;
+  const [slides, setSlides] = useState(null);
   useEffect(() => {
-    slides = sliderContainer.current;
+    setSlides(sliderContainer.current);
+    setTotalIndex(sliderContainer.current.children.length);
     //Declaramos un intervalo que cada 4 segundos pasa al siguiente slide.
-    /* let slideAutomatic;
+    let slideAutomatic;
     slideAutomatic = setInterval(() => {
       nextSlide();
     }, 4000);
@@ -109,7 +150,7 @@ export default function App() {
       slideAutomatic = setInterval(() => {
         nextSlide();
       }, 4000);
-    }); */
+    });
   }, []);
 
   return (
@@ -123,7 +164,7 @@ export default function App() {
             <Card>
               <Profile>
                 <ProfileImg src={ro} alt="foto de perfil" />
-                <h1>Jhon Doe</h1>
+                <h1>Rodri</h1>
               </Profile>
               <CommentContainer>
                 <p>
@@ -149,7 +190,7 @@ export default function App() {
             <Card>
               <Profile>
                 <ProfileImg src={moni} alt="foto de perfil" />
-                <h1>Jhon Doe</h1>
+                <h1>Moni</h1>
               </Profile>
               <CommentContainer>
                 <p>
@@ -166,7 +207,9 @@ export default function App() {
         </Button>
       </SliderContainer>
 
-      <button onClick={() => goToItem(3)}>Test</button>
+      <button onClick={() => goToItem(0)}>Item 0</button>
+      <button onClick={() => goToItem(1)}>Item 1</button>
+      <button onClick={() => goToItem(2)}>Item 2</button>
     </SliderMain>
   );
 }

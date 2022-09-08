@@ -17,7 +17,7 @@ export default function App() {
   const sliderContainer = useRef(null);
   const sliderInterval = useRef(null);
 
-  const [totalItems, setTotalIndex] = useState(null);
+  const [totalItems, setTotalItems] = useState(null);
 
   const nextSlide = () => {
     //Leemos el tamaño de los slide
@@ -29,8 +29,9 @@ export default function App() {
 
   const handleSlides = (slideSize, elements, actionType, itemNumber) => {
     //Accionamos solo si hay slide.
-    console.log(actionType);
+    console.log(totalItems)
     if (totalItems > 0) {
+      console.log(actionType)
       //Agregamos transition al contenedor de slide.
       slides.style.transition = "300ms ease-out all";
 
@@ -132,12 +133,12 @@ export default function App() {
   const [slides, setSlides] = useState(null);
   useEffect(() => {
     setSlides(sliderContainer.current);
-    setTotalIndex(sliderContainer.current.children.length);
+    setTotalItems(sliderContainer.current.children.length);
     //Declaramos un intervalo que cada 4 segundos pasa al siguiente slide.
-    let slideAutomatic;
+    /* let slideAutomatic;
     slideAutomatic = setInterval(() => {
-      nextSlide();
-    }, 4000);
+      totalItems !== null && nextSlide();
+    }, 3000);
 
     let SliderContainer = sliderInterval.current;
     //Detenemos el slide automático, eliminando el intervalo al pasar el mouse sobre el slider.
@@ -149,9 +150,9 @@ export default function App() {
     SliderContainer.addEventListener("mouseleave", () => {
       slideAutomatic = setInterval(() => {
         nextSlide();
-      }, 4000);
-    });
-  }, []);
+      }, 3000);
+    }); */
+  }, [totalItems]);
 
   return (
     <SliderMain>

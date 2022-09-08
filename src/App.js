@@ -18,6 +18,29 @@ export default function App() {
   const sliderInterval = useRef(null);
 
   const [totalItems, setTotalItems] = useState(null);
+  const [slides, setSlides] = useState(null);
+  useEffect(() => {
+    setSlides(sliderContainer.current);
+    setTotalItems(sliderContainer.current.children.length);
+    //Declaramos un intervalo que cada 4 segundos pasa al siguiente slide.
+    /* let slideAutomatic;
+    slideAutomatic = setInterval(() => {
+      totalItems !== null && nextSlide();
+    }, 3000);
+
+    let SliderContainer = sliderInterval.current;
+    //Detenemos el slide automático, eliminando el intervalo al pasar el mouse sobre el slider.
+    SliderContainer.addEventListener("mouseenter", () => {
+      clearInterval(slideAutomatic);
+    });
+
+    //Activamos nuevamente el slide automático al quitar el puntero del slider.
+    SliderContainer.addEventListener("mouseleave", () => {
+      slideAutomatic = setInterval(() => {
+        nextSlide();
+      }, 3000);
+    }); */
+  }, [totalItems]);
 
   const nextSlide = () => {
     //Leemos el tamaño de los slide
@@ -29,9 +52,9 @@ export default function App() {
 
   const handleSlides = (slideSize, elements, actionType, itemNumber) => {
     //Accionamos solo si hay slide.
-    console.log(totalItems)
+    console.log(totalItems);
     if (totalItems > 0) {
-      console.log(actionType)
+      console.log(actionType);
       //Agregamos transition al contenedor de slide.
       slides.style.transition = "300ms ease-out all";
 
@@ -58,14 +81,16 @@ export default function App() {
 
         //Establecemos el index actual del slide
         setCurrentCardIndex((prev) => {
-          return prev >= totalItems - 1 ? 0 : itemNumber || prev + elements.length;
+          return prev >= totalItems - 1
+            ? 0
+            : itemNumber || prev + elements.length;
         });
       }
       if (actionType === "prev") {
         //Agregamos el/los elementos slide al inicio del array de slide.
         //Insetamos el último slide antes del primero.
         elements.forEach((e, i) => {
-          slides.insertBefore(elements.at(-(i+1)), slides.firstChild);
+          slides.insertBefore(elements.at(-(i + 1)), slides.firstChild);
           //console.log([...slides.children].at(-(i+1)))
         });
         //Quitamos la transition al container del slides y los movemos a la izquierda en px el tamaño de los slide.
@@ -80,7 +105,9 @@ export default function App() {
 
         //Establecemos el index actual del slide
         setCurrentCardIndex((prev) => {
-          return prev <= 0 ? totalItems - 1 : itemNumber || prev - elements.length;
+          return prev <= 0
+            ? totalItems - 1
+            : itemNumber || prev - elements.length;
         });
       }
     }
@@ -105,14 +132,10 @@ export default function App() {
   const goToItem = (itemNumber) => {
     if (currentCardIndex !== itemNumber) {
       const itemList = [...slides.children];
-      let slidesTotal = currentCardIndex > itemNumber ?
-      itemList.slice(
-        -(currentCardIndex - itemNumber)
-      ):
-      itemList.slice(
-        0,
-        Math.abs(currentCardIndex - itemNumber)
-      );
+      let slidesTotal =
+        currentCardIndex > itemNumber
+          ? itemList.slice(-(currentCardIndex - itemNumber))
+          : itemList.slice(0, Math.abs(currentCardIndex - itemNumber));
 
       //Establecemos el tamaño de los slides a recorrer para llegar al item o card solicitada.
       const slideSize = slidesTotal?.reduce((acc, curr) => {
@@ -129,30 +152,6 @@ export default function App() {
     return;
   };
 
-  //Array de slide
-  const [slides, setSlides] = useState(null);
-  useEffect(() => {
-    setSlides(sliderContainer.current);
-    setTotalItems(sliderContainer.current.children.length);
-    //Declaramos un intervalo que cada 4 segundos pasa al siguiente slide.
-    /* let slideAutomatic;
-    slideAutomatic = setInterval(() => {
-      totalItems !== null && nextSlide();
-    }, 3000);
-
-    let SliderContainer = sliderInterval.current;
-    //Detenemos el slide automático, eliminando el intervalo al pasar el mouse sobre el slider.
-    SliderContainer.addEventListener("mouseenter", () => {
-      clearInterval(slideAutomatic);
-    });
-
-    //Activamos nuevamente el slide automático al quitar el puntero del slider.
-    SliderContainer.addEventListener("mouseleave", () => {
-      slideAutomatic = setInterval(() => {
-        nextSlide();
-      }, 3000);
-    }); */
-  }, [totalItems]);
 
   return (
     <SliderMain>

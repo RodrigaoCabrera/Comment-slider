@@ -23,10 +23,10 @@ export default function App() {
     setSlides(sliderContainer.current);
     setTotalItems(sliderContainer.current.children.length);
     //Declaramos un intervalo que cada 4 segundos pasa al siguiente slide.
-    /* let slideAutomatic;
+    let slideAutomatic;
     slideAutomatic = setInterval(() => {
       totalItems !== null && nextSlide();
-    }, 3000);
+    }, 5500);
 
     let SliderContainer = sliderInterval.current;
     //Detenemos el slide automático, eliminando el intervalo al pasar el mouse sobre el slider.
@@ -38,8 +38,8 @@ export default function App() {
     SliderContainer.addEventListener("mouseleave", () => {
       slideAutomatic = setInterval(() => {
         nextSlide();
-      }, 3000);
-    }); */
+      }, 5500);
+    });
   }, [totalItems]);
 
   const nextSlide = () => {
@@ -143,7 +143,6 @@ export default function App() {
         return handleSlides(slideSize, slidesTotal, "next", itemNumber);
       } else {
         //Obtenemos el último índice del array de slide.
-        const lastIndex = slides.children.length - 1;
         return handleSlides(slideSize, slidesTotal, "prev", itemNumber);
       }
     }

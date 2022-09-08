@@ -4,7 +4,7 @@ import styled from "styled-components";
 const SlideButton = ({ action, image }) => {
   return (
     <Button onClick={action}>
-      <img src={image} />
+      <img src={image} alt="flecha para deslizar las cartas" />
     </Button>
   );
 };

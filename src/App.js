@@ -4,14 +4,14 @@ import "./App.css";
 import { useRef, useEffect, useState } from "react";
 
 //import de imágenes
-import profile from "./assets/profile.png";
-import ro from "./assets/ro.png";
-import moni from "./assets/monik2.png";
 import next from "./assets/next.svg";
 import prev from "./assets/prev.svg";
 
 //Import de styled component
 import styled from "styled-components";
+import Cards from "./components/CardContainer";
+import SlideButton from "./components/SlideButton";
+import Pagination from "./components/Pagination";
 
 export default function App() {
   const sliderContainer = useRef(null);
@@ -52,9 +52,7 @@ export default function App() {
 
   const handleSlides = (slideSize, elements, actionType, itemNumber) => {
     //Accionamos solo si hay slide.
-    console.log(totalItems);
     if (totalItems > 0) {
-      console.log(actionType);
       //Agregamos transition al contenedor de slide.
       slides.style.transition = "300ms ease-out all";
 
@@ -152,64 +150,19 @@ export default function App() {
     return;
   };
 
-
   return (
     <SliderMain>
       <SliderContainer ref={sliderInterval}>
-        <Button onClick={prevSlide}>
-          <img src={prev} />
-        </Button>
-        <SliderChildren>
-          <CardContainer ref={sliderContainer}>
-            <Card>
-              <Profile>
-                <ProfileImg src={ro} alt="foto de perfil" />
-                <h1>Rodri</h1>
-              </Profile>
-              <CommentContainer>
-                <p>
-                  Me pareció excelente, creo que el Discord está muy bien
-                  organizado y la iniciativa de NUWE es tremenda, gracias por la
-                  oportunidad, realmente lo disfruté.
-                </p>
-              </CommentContainer>
-            </Card>
-            <Card>
-              <Profile>
-                <img src={profile} alt="foto de perfil" />
-                <h1>Jhon Doe</h1>
-              </Profile>
-              <CommentContainer>
-                <p>
-                  Me pareció excelente, creo que el Discord está muy bien
-                  organizado y la iniciativa de NUWE es tremenda, gracias por la
-                  oportunidad, realmente lo disfruté.
-                </p>
-              </CommentContainer>
-            </Card>
-            <Card>
-              <Profile>
-                <ProfileImg src={moni} alt="foto de perfil" />
-                <h1>Moni</h1>
-              </Profile>
-              <CommentContainer>
-                <p>
-                  Me pareció excelente, creo que el Discord está muy bien
-                  organizado y la iniciativa de NUWE es tremenda, gracias por la
-                  oportunidad, realmente lo disfruté.
-                </p>
-              </CommentContainer>
-            </Card>
-          </CardContainer>
-        </SliderChildren>
-        <Button onClick={nextSlide}>
-          <img src={next} />
-        </Button>
-      </SliderContainer>
+        <SlideButton action={prevSlide} image={prev} />
 
-      <button onClick={() => goToItem(0)}>Item 0</button>
-      <button onClick={() => goToItem(1)}>Item 1</button>
-      <button onClick={() => goToItem(2)}>Item 2</button>
+        <SliderChildren>
+          <Cards sliderContainer={sliderContainer} />
+        </SliderChildren>
+
+        <SlideButton action={nextSlide} image={next} />
+
+        <Pagination totalItems={totalItems} currentCardIndex={currentCardIndex} goToItem={goToItem} />
+      </SliderContainer>
     </SliderMain>
   );
 }
@@ -225,6 +178,7 @@ const SliderContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 50px;
+  position: relative;
 `;
 
 const SliderChildren = styled.section`
@@ -232,46 +186,4 @@ const SliderChildren = styled.section`
   align-items: center;
   overflow: hidden;
   max-width: 508px;
-`;
-const CardContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
-const Card = styled.section`
-  min-width: 100%;
-  height: 258.58px;
-  background: #252835;
-  border: 2px solid #2e353f;
-  box-shadow: 10px 10px 50px rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
-`;
-
-const Button = styled.button`
-  width: 34px;
-  height: 36px;
-  background: #1e212e;
-  border: 1px solid #39424e;
-  border-radius: 5px;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-`;
-
-const Profile = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 1rem;
-  color: #fff;
-`;
-
-const CommentContainer = styled.div`
-  padding: 1rem;
-  color: #fff;
-`;
-
-const ProfileImg = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
 `;
